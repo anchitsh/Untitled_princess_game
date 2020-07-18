@@ -29,24 +29,46 @@ public class animationcontroller : MonoBehaviour
         bool comingdown = charController.comingdown;
         bool landed = charController.landed;
         bool gp = charController.groundpound;
-        bool flipsorite = (spriteren.flipX ? (x > 0.01f) : (x < -0.01f));
-        if (flipsorite)
+        bool block = charController.block;
+        bool attack = charController.attack;
+
+        if (block == false && attack == false )
         {
-            spriteren.flipX = !spriteren.flipX;
+            bool flipsorite = (spriteren.flipX ? (x > 0.01f) : (x < -0.01f));
+            if (flipsorite)
+            {
+                spriteren.flipX = !spriteren.flipX;
+            }
+
+            if (x == 0)
+            {
+                ani.SetBool("idle", true);
+                ani.SetBool("moving", false);
+            }
+            else if (x != 0)
+            {
+                ani.SetBool("moving", true);
+                ani.SetBool("idle", false);
+            }
+
+        }
+        if(block == true)
+        {
+            ani.SetBool("block", true);
+        }
+        else if (block == false)
+        {
+            ani.SetBool("block", false);
         }
 
-
-        if (x == 0)
+        if(attack == true)
         {
-            ani.SetBool("idle", true);
-            ani.SetBool("moving", false);
+            ani.SetBool("attack", true);
         }
-        else if (x != 0)
+        else if (attack == false)
         {
-            ani.SetBool("moving", true);
-            ani.SetBool("idle", false);
+            ani.SetBool("attack", false);
         }
-
         if (gp)
         {
             goinup = false;

@@ -51,8 +51,9 @@ public class charController : MonoBehaviour
     private Transform m_currMovingPlatform;
 
     bool jmp;
-    public static bool goinup, comingdown, landed, groundpound;
+    public static bool goinup, comingdown, landed, groundpound, block, attack;
     public float GroundpoundForce;
+    bool jumpswitch, runswitch;
     // Start is called before the first frame update
     void Start()
     {
@@ -65,6 +66,10 @@ public class charController : MonoBehaviour
         goinup = false;
         comingdown = false;
         groundpound = false;
+        block = false;
+        attack = false;
+        jumpswitch = true;
+        runswitch = true;
     }
     private void FixedUpdate()
     {
@@ -80,7 +85,7 @@ public class charController : MonoBehaviour
         BetterJump();
         CheckIfGrounded();
         findjumppos();
-
+        combat();
         Debug.Log("goinup:" + goinup + "    coming down" + comingdown);
 
     }
@@ -88,33 +93,35 @@ public class charController : MonoBehaviour
 
     void Move()
     {
-
-        if ((Input.GetKey("left")) && (Speed > -MaxSpeed))
+        if (runswitch == true)
         {
-            Speed = Speed - Acceleration * Time.deltaTime;
-            if (Speed > 0)
+            if ((Input.GetKey("left")) && (Speed > -MaxSpeed))
             {
-                Speed = Speed - Deceleration * Time.deltaTime;
+                Speed = Speed - Acceleration * Time.deltaTime;
+                if (Speed > 0)
+                {
+                    Speed = Speed - Deceleration * Time.deltaTime;
+                }
             }
-        }
-        else if ((Input.GetKey("right")) && (Speed < MaxSpeed))
-        {
-            Speed = Speed + Acceleration * Time.deltaTime;
-            if (Speed < 0)
+            else if ((Input.GetKey("right")) && (Speed < MaxSpeed))
             {
-                Speed = Speed + Deceleration * Time.deltaTime;
+                Speed = Speed + Acceleration * Time.deltaTime;
+                if (Speed < 0)
+                {
+                    Speed = Speed + Deceleration * Time.deltaTime;
+                }
             }
-        }
 
-        else
-        {
-            if (Speed > Deceleration * Time.deltaTime) Speed = Speed - Deceleration * Time.deltaTime;
-            else if (Speed < -Deceleration * Time.deltaTime) Speed = Speed + Deceleration * Time.deltaTime;
             else
-                Speed = 0;
+            {
+                if (Speed > Deceleration * Time.deltaTime) Speed = Speed - Deceleration * Time.deltaTime;
+                else if (Speed < -Deceleration * Time.deltaTime) Speed = Speed + Deceleration * Time.deltaTime;
+                else
+                    Speed = 0;
+            }
+            position = transform.position.x + Speed * Time.deltaTime;
+            transform.position = new Vector2(position, transform.position.y);
         }
-        position = transform.position.x + Speed * Time.deltaTime;
-        transform.position = new Vector2(position, transform.position.y);
         /*
         float x = Input.GetAxisRaw("Horizontal");
 
@@ -125,7 +132,7 @@ public class charController : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded))
+        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded) && (jumpswitch))
         {
             jmp = true;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
@@ -215,6 +222,45 @@ public class charController : MonoBehaviour
         }
     }
 
+    void combat()
+    {
+        if (goinup == false && comingdown == false)
+        {
+            if (Input.GetKey(KeyCode.X))
+            {
+                
+                block = true;
+            }
+            else
+            {
+                
+                block = false;
+            }
+
+
+
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                
+                attack = true;
+            }
+            if (attack == true || block == true)
+            {
+                jumpswitch = false;
+                runswitch = false;
+            }
+            else
+            {
+                jumpswitch = true;
+                runswitch = true;
+            }
+        }
+    }
+
+    void attackoff()
+    {
+        attack = false;
+    }
 
 
 
