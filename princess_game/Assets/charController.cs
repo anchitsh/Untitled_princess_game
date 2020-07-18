@@ -51,7 +51,8 @@ public class charController : MonoBehaviour
     private Transform m_currMovingPlatform;
 
     bool jmp;
-    public static bool goinup, comingdown, landed;
+    public static bool goinup, comingdown, landed, groundpound;
+    public float GroundpoundForce;
     // Start is called before the first frame update
     void Start()
     {
@@ -63,6 +64,7 @@ public class charController : MonoBehaviour
         midair = 0;
         goinup = false;
         comingdown = false;
+        groundpound = false;
     }
     private void FixedUpdate()
     {
@@ -185,22 +187,33 @@ public class charController : MonoBehaviour
             }
 
             landed = false;
+            gd();
         }
         
         if(comingdown == true)
         {
             landed = false;
-            if(isGrounded == true)
+            gd();
+            if (isGrounded == true)
             {
                 goinup = false;
                 comingdown = false;
                 landed = true;
+                groundpound = false;
+ 
             }
 
         }
     }
 
-
+    void gd()
+    {
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            groundpound = true;
+            rb.velocity = new Vector2(rb.velocity.x, -GroundpoundForce);
+        }
+    }
 
 
 

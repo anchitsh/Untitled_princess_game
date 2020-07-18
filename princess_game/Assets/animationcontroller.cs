@@ -28,7 +28,7 @@ public class animationcontroller : MonoBehaviour
         bool goinup = charController.goinup;
         bool comingdown = charController.comingdown;
         bool landed = charController.landed;
-
+        bool gp = charController.groundpound;
         bool flipsorite = (spriteren.flipX ? (x > 0.01f) : (x < -0.01f));
         if (flipsorite)
         {
@@ -47,7 +47,12 @@ public class animationcontroller : MonoBehaviour
             ani.SetBool("idle", false);
         }
 
-
+        if (gp)
+        {
+            goinup = false;
+            comingdown = false;
+            ani.SetInteger("jumpstate", 4);
+        }
         if (goinup)
         {
             ani.SetInteger("jumpstate", 1);
@@ -59,6 +64,7 @@ public class animationcontroller : MonoBehaviour
             ani.SetInteger("jumpstate", 2);
 
         }
+
         else if (landed)
         {
             ani.SetInteger("jumpstate", 3);
