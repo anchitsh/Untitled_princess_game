@@ -27,7 +27,7 @@ public class charController : MonoBehaviour
     public float jumpForce;
     public int defaultJumps = 1;
     int morejumps;
-    bool jump;
+
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
 
@@ -37,26 +37,18 @@ public class charController : MonoBehaviour
     public int buffermax = 10, coymax =10;
     int buffercounter = 0, coybuffer = 0;
     bool bufferbool;
-    bool midjump;
-    Collider2D body;
+    
 
-    public float climbSpeed;
-    bool isclimbing = false;
-    float gravityScaleAtStart;
 
-    float midair;
-    bool walltouch;
 
-    public static bool move;
-    private Transform m_currMovingPlatform;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         morejumps = defaultJumps;
-        body = rb.GetComponent<Collider2D>();
-        gravityScaleAtStart = rb.gravityScale;
-        jump = false;
+
+        
     }
     private void FixedUpdate()
     {
@@ -69,18 +61,13 @@ public class charController : MonoBehaviour
 
         
         Jump();
-        BetterJump();
-        bufferjump();
-        coyetetime();
-        climbLadder();
-        
-
-       // Debug.Log(midjump + "midjump");
-        //Debug.Log("grounded" + isGrounded);
         CheckIfGrounded();
-        mid_air();
-        //  Debug.Log(rb.velocity.y);
-        Debug.Log("is it in midair"+midair);
+        //  BetterJump();
+        //  bufferjump();
+        // coyetetime();
+
+
+
         Debug.Log("is it grounded" + isGrounded);
 
 
@@ -126,65 +113,16 @@ public class charController : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || morejumps > 0) && walltouch == false)
+        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded) )
         {
-            midjump = true;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             morejumps--;
-            jump = true;
             transform.parent = null;
         }
-        else if (Input.GetKeyDown(KeyCode.Space) && (isclimbing ==true))
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            jump = true;
-            isclimbing = false;
-        }
-        else if (Input.GetKeyDown(KeyCode.Space) && (walltouch == true) && isGrounded == false)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce*1.5f);
-            Speed = 10;
-            jump = true;
-            isclimbing = false;
-        }
-        else if (Input.GetKeyDown(KeyCode.Space) && (walltouch == true) && isGrounded == true)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-        }
 
 
     }
 
-
-
-    void mid_air()
-    {
-        if (isGrounded == true)
-        {
-            midair = 0;
-        }
-        else if (isGrounded == true)
-        {
-            midair = 1;
-        }
-
-
-    }
-    void checkstat()
-    {
-        if (midjump = true && rb.velocity.y > 0)
-        {
-
-        }
-        else if (midjump = true && rb.velocity.y < 0)
-        {
-
-        }
-        else if (isGrounded = true && rb.velocity.y == 0)
-        {
-            midjump = false;
-        }
-    }
     void BetterJump()
     {
         if (rb.velocity.y < 0)
@@ -210,6 +148,7 @@ public class charController : MonoBehaviour
 
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
                 midjump = true;
+                jump = true;
             }
             if (buffercounter > buffermax)
             {
@@ -243,7 +182,7 @@ public class charController : MonoBehaviour
         if (colliders != null)
         {
             isGrounded = true;
-            jump = false;
+
             morejumps = defaultJumps;
             
         }
@@ -256,90 +195,4 @@ public class charController : MonoBehaviour
             isGrounded = false;
         }
     }
- 
-
-    void climbLadder()
-    {
-
-        if (body.IsTouchingLayers(LayerMask.GetMask("ladder")))
-        {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                isclimbing = true;
-                Speed = 0;
-            }
-
-            if (isclimbing)
-            {
-                rb.velocity = new Vector2(0, 0);
-                rb.gravityScale = 0;
-                Debug.Log("2");
-                float controlThrow = Input.GetAxisRaw("Vertical");
-                Debug.Log("control throw" + controlThrow);
-                //rb.velocity= new Vector2(rb.velocity.x, controlThrow * climbSpeed);
-                transform.position = new Vector2(transform.position.x, transform.position.y + (controlThrow * Time.deltaTime * climbSpeed));
-
-            }
-            else
-                rb.gravityScale = 1;
-
-        }
-        else
-        {
-            rb.gravityScale = 1;
-            isclimbing = false;
-        }
-           
-
-
-    }
-
-    public void ClimbLadder()
-    {
-        if (!body.IsTouchingLayers(LayerMask.GetMask("Ladder")))
-        {
-            rb.gravityScale = gravityScaleAtStart;
-            return;
-        }
-
-        float controlThrow = Input.GetAxisRaw("Vertical");
-        Vector2 climbVelocity = new Vector2(rb.velocity.x, controlThrow * climbSpeed);
-        rb.velocity = climbVelocity;
-        rb.gravityScale = 0;
-
-    }
-    void OnCollisionEnter2D(Collision2D other)
-    {
-
-        if (other.gameObject.tag == "wall")
-        {
-            walltouch = true;
-        }
-        if (other.gameObject.tag == "moving")
-        {
-            m_currMovingPlatform = other.gameObject.transform;
-            transform.SetParent(m_currMovingPlatform);
-        }
-        if (other.gameObject.tag == "bounce")
-        {
-            rb.velocity = new Vector2(rb.velocity.x, 20);
-        }
-
-    }
-    private void OnCollisionExit2D(Collision2D other)
-    {
-        if (other.gameObject.tag == "wall")
-        {
-            walltouch = false;
-        }
-
-        if (other.gameObject.tag == "moving")
-        {
-            transform.parent = null;
-            m_currMovingPlatform = null;
-
-        }
-
-    }
-
 }
