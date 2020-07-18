@@ -18,29 +18,52 @@ public class animationcontroller : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         ani = GetComponent<Animator>();
+        ani.SetInteger("jumpstate", 0);
     }
 
     // Update is called once per frame
     void Update()
     {
         float x = Input.GetAxisRaw("Horizontal");
-        Debug.Log(x);
-        
+        bool goinup = charController.goinup;
+        bool comingdown = charController.comingdown;
+        bool landed = charController.landed;
+
         bool flipsorite = (spriteren.flipX ? (x > 0.01f) : (x < -0.01f));
         if (flipsorite)
         {
             spriteren.flipX = !spriteren.flipX;
         }
+
+
         if (x == 0)
         {
             ani.SetBool("idle", true);
             ani.SetBool("moving", false);
         }
-        if (x != 0)
+        else if (x != 0)
         {
             ani.SetBool("moving", true);
             ani.SetBool("idle", false);
         }
+
+
+        if (goinup)
+        {
+            ani.SetInteger("jumpstate", 1);
+
+        }
+
+        else if (comingdown)
+        {
+            ani.SetInteger("jumpstate", 2);
+
+        }
+        else if (landed)
+        {
+            ani.SetInteger("jumpstate", 3);
+        }
+
 
     }
 }

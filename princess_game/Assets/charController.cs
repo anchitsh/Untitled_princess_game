@@ -27,28 +27,42 @@ public class charController : MonoBehaviour
     public float jumpForce;
     public int defaultJumps = 1;
     int morejumps;
-
+    bool jump;
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
 
 
 
     [Header("Misc")]
-    public int buffermax = 10, coymax =10;
+    public int buffermax = 10, coymax = 10;
     int buffercounter = 0, coybuffer = 0;
     bool bufferbool;
-    
+    bool midjump;
+    Collider2D body;
 
+    public float climbSpeed;
+    bool isclimbing = false;
+    float gravityScaleAtStart;
 
+    float midair;
+    bool walltouch;
 
+    public static bool move;
+    private Transform m_currMovingPlatform;
 
+    bool jmp;
+    public static bool goinup, comingdown, landed;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         morejumps = defaultJumps;
-
-        
+        body = rb.GetComponent<Collider2D>();
+        gravityScaleAtStart = rb.gravityScale;
+        jump = false;
+        midair = 0;
+        goinup = false;
+        comingdown = false;
     }
     private void FixedUpdate()
     {
@@ -59,17 +73,13 @@ public class charController : MonoBehaviour
     {
 
 
-        
+
         Jump();
+        BetterJump();
         CheckIfGrounded();
-        //  BetterJump();
-        //  bufferjump();
-        // coyetetime();
+        findjumppos();
 
-
-
-        Debug.Log("is it grounded" + isGrounded);
-
+        Debug.Log("goinup:" + goinup + "    coming down" + comingdown);
 
     }
 
@@ -93,7 +103,7 @@ public class charController : MonoBehaviour
                 Speed = Speed + Deceleration * Time.deltaTime;
             }
         }
-            
+
         else
         {
             if (Speed > Deceleration * Time.deltaTime) Speed = Speed - Deceleration * Time.deltaTime;
@@ -113,15 +123,17 @@ public class charController : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded) )
+        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded))
         {
+            jmp = true;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            morejumps--;
-            transform.parent = null;
+            
+            goinup = true;
         }
 
-
     }
+
+
 
     void BetterJump()
     {
@@ -134,6 +146,82 @@ public class charController : MonoBehaviour
             rb.velocity += Vector2.up * Physics2D.gravity * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
     }
+
+    void CheckIfGrounded()
+    {
+        Collider2D colliders = Physics2D.OverlapCircle(isGroundedChecker.position, checkGroundRadius, groundLayer);
+
+        if (colliders != null)
+        {
+            isGrounded = true;
+            morejumps = defaultJumps;
+        }
+        else
+        {
+            if (isGrounded)
+            {
+                lastTimeGrounded = Time.time;
+            }
+            isGrounded = false;
+
+        }
+    }
+
+
+
+    void findjumppos()
+    {
+        
+
+
+
+        if(goinup == true)
+        {
+            if (rb.velocity.y < 0)
+            {
+                
+                comingdown = true;
+                goinup = false;
+            }
+
+            landed = false;
+        }
+        
+        if(comingdown == true)
+        {
+            landed = false;
+            if(isGrounded == true)
+            {
+                goinup = false;
+                comingdown = false;
+                landed = true;
+            }
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     void bufferjump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded == false)
@@ -148,7 +236,6 @@ public class charController : MonoBehaviour
 
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
                 midjump = true;
-                jump = true;
             }
             if (buffercounter > buffermax)
             {
@@ -163,36 +250,103 @@ public class charController : MonoBehaviour
     {
         if (isGrounded == false)
         {
-            if (Input.GetKeyDown(KeyCode.Space) && coybuffer < coymax && midjump==false)
+            if (Input.GetKeyDown(KeyCode.Space) && coybuffer < coymax && midjump == false)
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             }
             coybuffer++;
-           
+
         }
         else
         {
             coybuffer = 0;
         }
     }
-    void CheckIfGrounded()
+
+
+
+    void climbLadder()
     {
-        Collider2D colliders = Physics2D.OverlapCircle(isGroundedChecker.position, checkGroundRadius, groundLayer);
 
-        if (colliders != null)
+        if (body.IsTouchingLayers(LayerMask.GetMask("ladder")))
         {
-            isGrounded = true;
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                isclimbing = true;
+                Speed = 0;
+            }
 
-            morejumps = defaultJumps;
-            
+            if (isclimbing)
+            {
+                rb.velocity = new Vector2(0, 0);
+                rb.gravityScale = 0;
+                Debug.Log("2");
+                float controlThrow = Input.GetAxisRaw("Vertical");
+                Debug.Log("control throw" + controlThrow);
+                //rb.velocity= new Vector2(rb.velocity.x, controlThrow * climbSpeed);
+                transform.position = new Vector2(transform.position.x, transform.position.y + (controlThrow * Time.deltaTime * climbSpeed));
+
+            }
+            else
+                rb.gravityScale = 1;
+
         }
         else
         {
-            if (isGrounded)
-            {
-                lastTimeGrounded = Time.time;
-            }
-            isGrounded = false;
+            rb.gravityScale = 1;
+            isclimbing = false;
         }
+
+
+
     }
+
+    public void ClimbLadder()
+    {
+        if (!body.IsTouchingLayers(LayerMask.GetMask("Ladder")))
+        {
+            rb.gravityScale = gravityScaleAtStart;
+            return;
+        }
+
+        float controlThrow = Input.GetAxisRaw("Vertical");
+        Vector2 climbVelocity = new Vector2(rb.velocity.x, controlThrow * climbSpeed);
+        rb.velocity = climbVelocity;
+        rb.gravityScale = 0;
+
+    }
+    void OnCollisionEnter2D(Collision2D other)
+    {
+
+        if (other.gameObject.tag == "wall")
+        {
+            walltouch = true;
+        }
+        if (other.gameObject.tag == "moving")
+        {
+            m_currMovingPlatform = other.gameObject.transform;
+            transform.SetParent(m_currMovingPlatform);
+        }
+        if (other.gameObject.tag == "bounce")
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 20);
+        }
+
+    }
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "wall")
+        {
+            walltouch = false;
+        }
+
+        if (other.gameObject.tag == "moving")
+        {
+            transform.parent = null;
+            m_currMovingPlatform = null;
+
+        }
+
+    }
+
 }
