@@ -8,7 +8,8 @@ public class animationcontroller : MonoBehaviour
     Animator ani;
     private SpriteRenderer spriteren;
 
-    
+    float x;
+    bool goinup, comingdown, landed, gp, block, attack, run, walk;
     private void Awake()
     {
         spriteren = GetComponent<SpriteRenderer>();
@@ -24,32 +25,55 @@ public class animationcontroller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float x = Input.GetAxisRaw("Horizontal");
-        bool goinup = charController.goinup;
-        bool comingdown = charController.comingdown;
-        bool landed = charController.landed;
-        bool gp = charController.groundpound;
-        bool block = charController.block;
-        bool attack = charController.attack;
+        x = Input.GetAxisRaw("Horizontal");
+        goinup = charController.goinup;
+        comingdown = charController.comingdown;
+        landed = charController.landed;
+        gp = charController.groundpound;
+        block = charController.block;
+        attack = charController.attack;
+        run = charController.run;
+        walk = charController.walk;
 
-        if (block == false && attack == false )
+        if (block == false )
         {
-            bool flipsorite = (spriteren.flipX ? (x > 0.01f) : (x < -0.01f));
-            if (flipsorite)
+            bool flipsorite = (spriteren.flipX ?  (x < -0.01f) :  (x > 0.01f));
+            if (flipsorite == true)
             {
                 spriteren.flipX = !spriteren.flipX;
             }
-
+            /*
             if (x == 0)
             {
                 ani.SetBool("idle", true);
-                ani.SetBool("moving", false);
+                ani.SetBool("run", false);
             }
             else if (x != 0)
             {
-                ani.SetBool("moving", true);
+                ani.SetBool("run", true);
                 ani.SetBool("idle", false);
+            }*/
+
+            if(run == false && walk == false)
+            {
+                ani.SetBool("idle", true);
+                ani.SetBool("run", false);
+                ani.SetBool("walk", false);
             }
+            else if(run)
+            {
+                ani.SetBool("run", true);
+                ani.SetBool("idle", false);
+                ani.SetBool("walk", false);
+            }
+            else if (walk)
+            {
+                ani.SetBool("walk", true);
+                ani.SetBool("idle", false);
+                ani.SetBool("run", false);
+            }
+
+
 
         }
         if(block == true)

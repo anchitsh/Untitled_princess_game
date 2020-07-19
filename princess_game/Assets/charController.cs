@@ -7,13 +7,18 @@ public class charController : MonoBehaviour
     private Rigidbody2D rb;
 
     [Header("Movement Settings")]
+    public float walk_speed;
+    public float run_speed;
+
+    /*
+    
     public float Speed = 0;
     public float MaxSpeed = 10;
     public float Acceleration = 10;
     public float Deceleration = 10;
     float position;
     float speed;
-
+    */
     [Header("Grounded checker")]
 
     public Transform isGroundedChecker;
@@ -51,7 +56,7 @@ public class charController : MonoBehaviour
     private Transform m_currMovingPlatform;
 
     bool jmp;
-    public static bool goinup, comingdown, landed, groundpound, block, attack;
+    public static bool goinup, comingdown, landed, groundpound, block, attack, run, walk;
     public float GroundpoundForce;
     bool jumpswitch, runswitch;
     // Start is called before the first frame update
@@ -70,6 +75,9 @@ public class charController : MonoBehaviour
         attack = false;
         jumpswitch = true;
         runswitch = true;
+        walk = false;
+        run = false;
+        
     }
     private void FixedUpdate()
     {
@@ -93,6 +101,7 @@ public class charController : MonoBehaviour
 
     void Move()
     {
+        /*
         if (runswitch == true)
         {
             if ((Input.GetKey("left")) && (Speed > -MaxSpeed))
@@ -121,13 +130,41 @@ public class charController : MonoBehaviour
             }
             position = transform.position.x + Speed * Time.deltaTime;
             transform.position = new Vector2(position, transform.position.y);
+        }*/
+        if (runswitch == true)
+        {
+            Debug.Log("walkbool" + walk);
+            float x = Input.GetAxisRaw("Horizontal");
+            if (x == 0)
+            {
+                run = false;
+                walk = false;
+                rb.velocity = new Vector2(0, rb.velocity.y);
+
+                return;
+            }
+
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                float moveBy = x * run_speed;
+                rb.velocity = new Vector2(moveBy, rb.velocity.y);
+                run = true;
+                walk = false;
+            }
+            else
+            {
+                float moveBy = x * walk_speed;
+                rb.velocity = new Vector2(moveBy, rb.velocity.y);
+                run = false;
+                walk = true;
+            }
         }
-        /*
-        float x = Input.GetAxisRaw("Horizontal");
+        else
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
+        }
 
-        float moveBy = x * speed;
 
-        rb.velocity = new Vector2(moveBy, rb.velocity.y);*/
     }
 
     void Jump()
@@ -244,12 +281,12 @@ public class charController : MonoBehaviour
                 
                 attack = true;
             }
-            if (attack == true || block == true)
+            if ( block == true)
             {
                 jumpswitch = false;
                 runswitch = false;
             }
-            else
+            else if (block == false)
             {
                 jumpswitch = true;
                 runswitch = true;
@@ -332,7 +369,6 @@ public class charController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 isclimbing = true;
-                Speed = 0;
             }
 
             if (isclimbing)
