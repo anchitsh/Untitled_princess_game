@@ -62,9 +62,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\animationcontroller.cs" />
-    <Compile Include="Assets\attackoff.cs" />
-    <Compile Include="Assets\charController.cs" />
+    <Compile Include="Assets\scripts\animationcontroller.cs" />
+    <Compile Include="Assets\scripts\attackoff.cs" />
+    <Compile Include="Assets\scripts\charController.cs" />
+    <Compile Include="Assets\scripts\shakecine.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.2f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
