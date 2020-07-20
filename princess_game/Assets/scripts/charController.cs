@@ -56,9 +56,9 @@ public class charController : MonoBehaviour
     private Transform m_currMovingPlatform;
 
     bool jmp;
-    public static bool goinup, comingdown, landed, groundpound, block, attack, run, walk;
+    public static bool goinup, comingdown, landed, groundpound, block, attack, run, walk, runattack;
     public float GroundpoundForce;
-    bool jumpswitch, runswitch, runswitchani;
+    bool jumpswitch, jumpswitchani, runswitch, runswitchani;
     // Start is called before the first frame update
     void Start()
     {
@@ -78,7 +78,7 @@ public class charController : MonoBehaviour
         walk = false;
         run = false;
         runswitchani= true;
-
+        jumpswitchani = true;
 
     }
     private void FixedUpdate()
@@ -97,7 +97,7 @@ public class charController : MonoBehaviour
         findjumppos();
         combat();
         Debug.Log("goinup:" + goinup + "    coming down" + comingdown);
-
+     
     }
 
 
@@ -142,16 +142,28 @@ public class charController : MonoBehaviour
                 run = false;
                 walk = false;
                 rb.velocity = new Vector2(0, rb.velocity.y);
-
+                runattack = false;
                 return;
             }
 
-            if (Input.GetKey(KeyCode.LeftControl))
+            if (Input.GetKey(KeyCode.LeftShift))
             {
                 float moveBy = x * run_speed;
                 rb.velocity = new Vector2(moveBy, rb.velocity.y);
                 run = true;
                 walk = false;
+                
+                
+                    if (Input.GetKey(KeyCode.X))
+                    {
+                        runattack = true;
+                    }
+                    else
+                    {
+                        runattack = false;
+                    }
+                
+                
             }
             else
             {
@@ -159,6 +171,7 @@ public class charController : MonoBehaviour
                 rb.velocity = new Vector2(moveBy, rb.velocity.y);
                 run = false;
                 walk = true;
+                runattack = false;
             }
         }
         else if(runswitch == false || runswitchani == false)
@@ -173,7 +186,7 @@ public class charController : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded) && (jumpswitch))
+        if (Input.GetKeyDown(KeyCode.Z) && (isGrounded) && (jumpswitch) && (jumpswitchani))
         {
             jmp = true;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
@@ -192,7 +205,7 @@ public class charController : MonoBehaviour
         {
             rb.velocity += Vector2.up * Physics2D.gravity * (fallMultiplier - 1) * Time.deltaTime;
         }
-        else if (rb.velocity.y > 0 && !Input.GetKey(KeyCode.Space))
+        else if (rb.velocity.y > 0 && !Input.GetKey(KeyCode.Z))
         {
             rb.velocity += Vector2.up * Physics2D.gravity * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
@@ -268,7 +281,7 @@ public class charController : MonoBehaviour
     {
         if (goinup == false && comingdown == false)
         {
-            if (Input.GetKey(KeyCode.X))
+            if (Input.GetKey(KeyCode.C))
             {
                 
                 block = true;
@@ -281,11 +294,8 @@ public class charController : MonoBehaviour
 
 
 
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                
-                attack = true;
-            }
+            
+            
             if ( block == true)
             {
                 jumpswitch = false;
@@ -306,6 +316,7 @@ public class charController : MonoBehaviour
 
     void runoff()
     {
+        
         runswitchani = false;
     }
 
@@ -314,6 +325,15 @@ public class charController : MonoBehaviour
         runswitchani = true;
     }
 
+    void jumpoff()
+    {
+        jumpswitchani = false;
+    }
+
+    void jumpon()
+    {
+        jumpswitchani = true;
+    }
 
 
     void shake()
@@ -334,7 +354,7 @@ public class charController : MonoBehaviour
 
     void bufferjump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded == false)
+        if (Input.GetKeyDown(KeyCode.Z) && isGrounded == false)
         {
             bufferbool = true;
         }
@@ -360,7 +380,7 @@ public class charController : MonoBehaviour
     {
         if (isGrounded == false)
         {
-            if (Input.GetKeyDown(KeyCode.Space) && coybuffer < coymax && midjump == false)
+            if (Input.GetKeyDown(KeyCode.Z) && coybuffer < coymax && midjump == false)
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             }

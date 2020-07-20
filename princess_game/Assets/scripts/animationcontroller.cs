@@ -9,7 +9,7 @@ public class animationcontroller : MonoBehaviour
     private SpriteRenderer spriteren;
 
     float x;
-    bool goinup, comingdown, landed, gp, block, attack, run, walk;
+    bool goinup, comingdown, landed, gp, block, attack, run, walk, runattack;
     private void Awake()
     {
         spriteren = GetComponent<SpriteRenderer>();
@@ -34,7 +34,8 @@ public class animationcontroller : MonoBehaviour
         attack = charController.attack;
         run = charController.run;
         walk = charController.walk;
-
+        runattack = charController.runattack;
+        Debug.Log("runattack" + runattack);
         if (block == false )
         {
             bool flipsorite = (spriteren.flipX ?  (x < -0.01f) :  (x > 0.01f));
@@ -65,6 +66,16 @@ public class animationcontroller : MonoBehaviour
                 ani.SetBool("run", true);
                 ani.SetBool("idle", false);
                 ani.SetBool("walk", false);
+                if (runattack == true)
+                {
+                    Debug.Log("in");
+                    ani.SetBool("attack", true);
+                }
+                else
+                {
+                    ani.SetBool("attack", false);
+                }
+                
             }
             else if (walk)
             {
@@ -85,14 +96,7 @@ public class animationcontroller : MonoBehaviour
             ani.SetBool("block", false);
         }
 
-        if(attack == true)
-        {
-            ani.SetBool("attack", true);
-        }
-        else if (attack == false)
-        {
-            ani.SetBool("attack", false);
-        }
+
         if (gp)
         {
             goinup = false;

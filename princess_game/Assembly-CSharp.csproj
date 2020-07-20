@@ -73,6 +73,7 @@
     <Compile Include="Assets\scripts\animationcontroller.cs" />
     <Compile Include="Assets\scripts\attackoff.cs" />
     <Compile Include="Assets\scripts\charController.cs" />
+    <Compile Include="Assets\scripts\parallax.cs" />
     <Compile Include="Assets\scripts\shakecine.cs" />
     <None Include="Assets\Demigiant\DOTween\readme.txt" />
     <Reference Include="UnityEngine">
