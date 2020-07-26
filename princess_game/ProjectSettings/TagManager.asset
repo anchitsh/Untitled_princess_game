@@ -3,7 +3,21 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - enemy
+  - heart1
+  - heart2
+  - heart3
+  - damage1
+  - damage2
+  - damage3
+  - score
+  - gem
+  - coin
+  - heart
+  - onpause
+  - slime
+  - block
   layers:
   - Default
   - TransparentFX

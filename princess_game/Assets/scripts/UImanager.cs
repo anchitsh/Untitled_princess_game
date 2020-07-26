@@ -2,26 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
+
 
 public class UImanager : MonoBehaviour
 {
-    public GameObject sword;
+    public GameObject cursor;
     public int currentselect;
-    float x, p1, p2, p3;
-
+    Animator ani;
     // Start is called before the first frame update
     void Start()
     {
         currentselect = 1;
-        x = sword.transform.position.x;
-        p1 = 0f;
-        p2 = -1.47f;
-        p3 = -2.84f;
+
+        ani = cursor.GetComponent<Animator>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        /*
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if(currentselect == 1)
@@ -42,16 +44,13 @@ public class UImanager : MonoBehaviour
             if (currentselect == 3)
             {
                 currentselect = 1;
-                sword.transform.position = new Vector2(x,p1);
+                sword.transform.position = new Vector2(x, p1);
             }
             else
             {
                 currentselect++;
                 swordown();
             }
-            
-
-            
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -65,41 +64,79 @@ public class UImanager : MonoBehaviour
                 currentselect--;
                 swordup();
             }
+
+        }
+
+
+        
+
+    */
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            if (currentselect == 3)
+            {
+                currentselect = 1;
+                
+            }
+            else
+            {
+                currentselect++;
+                
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            if (currentselect == 1)
+            {
+                currentselect = 3;
+                
+            }
+            else
+            {
+                currentselect--;
+                
+            }
+
+        }
+        switch (currentselect)
+        {
+            case 1:
+                ani.SetInteger("cursor", 1);
+                break;
+            case 2:
+                ani.SetInteger("cursor", 2);
+                break;
+            case 3:
+                ani.SetInteger("cursor", 3);
+                break;
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             
+            if (currentselect == 1)
+            {
+                SceneManager.LoadScene("test");
+            }
+            else if (currentselect == 2)
+            {
+                SceneManager.LoadScene("test");
 
+            }
+            else if (currentselect == 3)
+            {
+                SceneManager.LoadScene("test");
+
+            }
         }
-        else
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-
+            ExitGame();
         }
-
-        Debug.Log(currentselect);
     }
 
-
-    void swordup()
+    public void ExitGame()
     {
-        if (currentselect == 1)
-        {
-            sword.transform.DOMove((new Vector2(x,p1)), 0.5f);
-        }
-        else if (currentselect == 2)
-        {
-            sword.transform.DOMove((new Vector2(x,p2)), 0.5f);
-        }
-
-
-    }
-
-    void swordown()
-    {
-        if (currentselect == 2)
-        {
-            sword.transform.DOMove((new Vector2(x,p2)), 0.5f);
-        }
-        else if (currentselect == 3)
-        {
-            sword.transform.DOMove((new Vector2(x,p3)), 0.5f);
-        }
+        Application.Quit();
     }
 }
