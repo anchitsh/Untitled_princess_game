@@ -168,7 +168,8 @@ public class magemov : MonoBehaviour
     void spawnfireball()
     {
         ani.SetBool("attack", true);
-        Debug.Log(direction);
+        ani.SetTrigger("attack");
+        Debug.Log("mageeeeeeeeeeeeeeeeeeeeeeee");
         
         
          if (direction)

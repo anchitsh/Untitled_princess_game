@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class shake : MonoBehaviour
 {
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,8 +16,20 @@ public class shake : MonoBehaviour
     {
         
     }
-    void shakepls()
+    void shakeplstail()
     {
         shakecine.flip = true;
+        shakecine.ShakeDuration = 0.5f;
+        shakecine.ShakeAmplitude = 1;
+    }
+    void shakeplshead()
+    {
+        shakecine.flip = true;
+        shakecine.ShakeDuration = 1.5f;
+        shakecine.ShakeAmplitude = 2;
+    }
+    void spawnshit()
+    {
+
     }
 }

@@ -41,7 +41,7 @@ public class parallaxfixed : MonoBehaviour
             float parallaxy = (previousCamPos.y - cam.position.y) * parallaxScales[i];
             float backgroundTargetPosY = backgrounds[i].position.y + parallaxy;
             // create a target position which is the background's current position with it's target x position
-            Vector3 backgroundTargetPos = new Vector3(backgroundTargetPosX, backgroundTargetPosY, backgrounds[i].position.z);
+            Vector3 backgroundTargetPos = new Vector3(backgroundTargetPosX, backgrounds[i].position.y, backgrounds[i].position.z);
             // fade between current position and the target position using lerp
             backgrounds[i].position = Vector3.Lerp(backgrounds[i].position, backgroundTargetPos, smoothing * Time.deltaTime);
         }

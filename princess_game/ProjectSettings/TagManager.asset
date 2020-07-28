@@ -18,6 +18,8 @@ TagManager:
   - onpause
   - slime
   - block
+  - dragon
+  - tail
   layers:
   - Default
   - TransparentFX

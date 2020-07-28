@@ -41,7 +41,7 @@ public class fireballmov : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         
-        if (other.gameObject.tag == "Player"&&charController.invincibility == false)
+        if (other.gameObject.tag == "Player" && charController.invincibility == false)
         {
             Debug.Log("in");
             healthsystem.health--;

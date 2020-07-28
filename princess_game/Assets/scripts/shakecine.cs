@@ -6,9 +6,9 @@ using UnityEngine.Events;
 public class shakecine : MonoBehaviour
 {
 
-    public float ShakeDuration = 0.3f;          // Time the Camera Shake effect will last
-    public float ShakeAmplitude = 1.2f;         // Cinemachine Noise Profile Parameter
-    public float ShakeFrequency = 2.0f;         // Cinemachine Noise Profile Parameter
+    public static float ShakeDuration = 0.3f;          // Time the Camera Shake effect will last
+    public static float ShakeAmplitude = 1.2f;         // Cinemachine Noise Profile Parameter
+    public static float ShakeFrequency = 2.0f;         // Cinemachine Noise Profile Parameter
     public static bool flip;
     private float ShakeElapsedTime = 0f;
 

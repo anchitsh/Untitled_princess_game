@@ -396,6 +396,8 @@ public class charController : MonoBehaviour
     void shake()
     {
         shakecine.flip = true;
+        shakecine.ShakeDuration = 0.5f;
+        shakecine.ShakeAmplitude = 1;
     }
     void swordattack()
     {
@@ -531,7 +533,24 @@ public class charController : MonoBehaviour
         }
 
     }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "tail")
+        {
+            // rb.velocity = new Vector2(rb.velocity.x, 15);
+            Debug.Log("hittttttttttttttttttttttttttttttttttttttttttttttttttt");
+            takedamage = true;
+            damagedirection = true;
+        }
+        if (other.gameObject.tag == "fire")
+        {
+            // rb.velocity = new Vector2(rb.velocity.x, 15);
+            Debug.Log("hittttttttttttttttttttttttttttttttttttttttttttttttttt");
+            takedamage = true;
+            damagedirection = false;
+        }
 
+    }
 
     void bufferjump()
     {
