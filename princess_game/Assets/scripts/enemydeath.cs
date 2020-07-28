@@ -20,6 +20,7 @@ public class enemydeath : MonoBehaviour
     {
         if(death == true)
         {
+            Debug.Log("eat shit");
             ani.SetBool("dead", true);
         }
     }
