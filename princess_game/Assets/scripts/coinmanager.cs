@@ -6,51 +6,23 @@ using UnityEngine.UI;
 
 public class coinmanager : MonoBehaviour
 {
-    public static int score;
-    public Text scoreText;
+    public int totalcoins, totalgems;
+    public static int coin, gem;
+    public Text coinText, gemtext;
     int temp;
     // Start is called before the first frame update
     void Start()
     {
-        score = PlayerPrefs.GetInt("coins", 0);
+        coin = 0;
+        gem = 0;
 
-        //scoreText.text = 
-        temp = score;
-       
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (temp < score)
-        {
-            int num = getlen(score);
-            switch (num)
-            {
-                case 1:
-                    scoreText.text = "000000"+score.ToString();
-                    break;
-                case 2:
-                    scoreText.text = "00000" + score.ToString();
-                    break;
-                case 3:
-                    scoreText.text = "0000" + score.ToString();
-                    break;
-                case 4:
-                    scoreText.text = "0000" + score.ToString();
-                    break;
-                case 5:
-                    scoreText.text = "000" + score.ToString();
-                    break;
-                case 6:
-                    scoreText.text = "00" + score.ToString();
-                    break;
-                case 7:
-                    scoreText.text ="0"+ score.ToString();
-                    break;
-            }
-            temp = score;
-        }
+        coinText.text = coin.ToString() + "/" + totalcoins.ToString();
+        gemtext.text = gem.ToString() + "/" + totalgems.ToString();
     }
 
     int getlen(int num)

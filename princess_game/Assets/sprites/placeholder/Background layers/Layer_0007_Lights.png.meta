@@ -5,6 +5,9 @@ TextureImporter:
   - first:
       213: -8197154666396543484
     second: Layer_0007_Lights_0
+  - first:
+      213: -6522234021118741036
+    second: Layer_0007_Lights_1
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -117,12 +120,12 @@ TextureImporter:
       name: Layer_0007_Lights_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 189
         y: 139
-        width: 788
+        width: 260
         height: 203
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -130,6 +133,27 @@ TextureImporter:
       bones: []
       spriteID: 4069f74e24bdd3e80800000000000000
       internalID: -8197154666396543484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer_0007_Lights_1
+      rect:
+        serializedVersion: 2
+        x: 461
+        y: 141
+        width: 274
+        height: 206
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d5ff3dc6be5c75a0800000000000000
+      internalID: -6522234021118741036
       vertices: []
       indices: 
       edges: []

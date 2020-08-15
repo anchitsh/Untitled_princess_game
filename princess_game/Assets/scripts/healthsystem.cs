@@ -4,24 +4,19 @@ using UnityEngine;
 
 public class healthsystem : MonoBehaviour
 {
-     GameObject heart1;
-     GameObject heart2;
-     GameObject heart3;
-     GameObject damage1;
-     GameObject damage2;
-     GameObject damage3;
+     public GameObject heart1;
+    public GameObject heart2;
+    public GameObject heart3;
+    public GameObject damage1;
+    public GameObject damage2;
+    public GameObject damage3;
     float hit;
     public static int health;
+
     // Start is called before the first frame update
+
     void Start()
     {
-        heart1 = GameObject.FindWithTag("heart1");
-        heart2 = GameObject.FindWithTag("heart2");
-        heart3 = GameObject.FindWithTag("heart3");
-        damage1 = GameObject.FindWithTag("damage1");
-        damage2 = GameObject.FindWithTag("damage2");
-        damage3 = GameObject.FindWithTag("damage3");
-
         heart1.SetActive(true);
         heart2.SetActive(true);
         heart3.SetActive(true);
@@ -29,6 +24,7 @@ public class healthsystem : MonoBehaviour
         damage2.SetActive(false);
         damage3.SetActive(false);
         health = 3;
+
     }
 
     // Update is called once per frame

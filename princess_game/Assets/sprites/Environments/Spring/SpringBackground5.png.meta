@@ -5,6 +5,9 @@ TextureImporter:
   - first:
       213: -1393365133114917369
     second: SpringBackground5_0
+  - first:
+      213: 1698098865944011210
+    second: SpringBackground5_1
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -119,10 +122,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 3862
-        height: 849
+        width: 5153
+        height: 1280
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -130,6 +133,27 @@ TextureImporter:
       bones: []
       spriteID: 70e35463bc5c9ace0800000000000000
       internalID: -1393365133114917369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpringBackground5_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 3783
+        height: 1280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac12612fbebd09710800000000000000
+      internalID: 1698098865944011210
       vertices: []
       indices: 
       edges: []

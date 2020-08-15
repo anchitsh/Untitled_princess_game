@@ -9,8 +9,8 @@ public class animationcontroller : MonoBehaviour
     private SpriteRenderer spriteren;
 
     float x;
-    bool goinup, comingdown, landed, gp, block, attack, run, walk, runattack, idleattack, walkattack, takedamage, damagedir;
-    public bool sprite_direction;/// left = false, right = true
+    bool goinup, comingdown, landed, gp, block, run, walk, runattack, idleattack, walkattack, takedamage, damagedir, finish;
+    public bool sprite_direction, animattack;/// left = false, right = true
     bool sprite;
     int health;
     private void Awake()
@@ -24,8 +24,9 @@ public class animationcontroller : MonoBehaviour
         ani = GetComponent<Animator>();
         ani.SetInteger("jumpstate", 0);
         sprite_direction = false;
-
+        transform.localRotation = Quaternion.Euler(0, 180, 0);
         sprite = spriteren.flipX;
+        animattack = false;
     }
 
     // Update is called once per frame
@@ -38,7 +39,6 @@ public class animationcontroller : MonoBehaviour
         landed = charController.landed;
         gp = charController.groundpound;
         block = charController.block;
-        attack = charController.attack;
         run = charController.run;
         walk = charController.walk;
         runattack = charController.runattack;
@@ -46,6 +46,7 @@ public class animationcontroller : MonoBehaviour
         walkattack = charController.walkattack;
         takedamage = charController.takedamage;
         damagedir = charController.damagedirection;
+        finish = charController.finish;
         //flipsprite();
         if (takedamage)
         {
@@ -79,12 +80,12 @@ public class animationcontroller : MonoBehaviour
         {
             ani.SetBool("takedamage", false);
         }
-        if (Input.GetKey("right"))
+        if (Input.GetKey("right")&& finish == false)
         {
             transform.localRotation = Quaternion.Euler(0, 180, 0);
 
         }
-        if (Input.GetKey("left"))
+        if (Input.GetKey("left") && finish == false)
         {
             transform.localRotation = Quaternion.Euler(0, 0, 0);
 
@@ -114,12 +115,9 @@ public class animationcontroller : MonoBehaviour
                 ani.SetBool("walkattack", false);
                 if (idleattack == true)
                 {
-                    ani.SetBool("idleattack", true);
+                    ani.SetTrigger("idleattack");
                 }
-                else
-                {
-                    ani.SetBool("idleattack", false); 
-                }
+          
             }
             else if(run)
             {
@@ -130,12 +128,9 @@ public class animationcontroller : MonoBehaviour
                 ani.SetBool("walkattack", false);
                 if (runattack == true)
                 {
-                    ani.SetBool("attack", true);
+                    ani.SetTrigger("attack");
                 }
-                else
-                {
-                    ani.SetBool("attack", false);
-                }
+                
                 
             }
             else if (walk)
@@ -147,12 +142,9 @@ public class animationcontroller : MonoBehaviour
                 ani.SetBool("idleattack", false);
                 if (walkattack == true)
                 {
-                    ani.SetBool("walkattack", true);
+                    ani.SetTrigger("walkattack");
                 }
-                else
-                {
-                    ani.SetBool("walkattack", false);
-                }
+            
             }
 
 

@@ -19,6 +19,6 @@ public class damage : MonoBehaviour
 
     void trigger_restart()
     {
-        SceneManager.LoadScene("test");
+        uilevel.dead = true;
     }
 }

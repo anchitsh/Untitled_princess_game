@@ -7,6 +7,7 @@ public class pound : MonoBehaviour
     public GameObject player, dragonhead, dragontail;
     Rigidbody2D rb;
     Animator ani,anitail;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,7 +53,9 @@ public class pound : MonoBehaviour
         {
             // rb.velocity = new Vector2(rb.velocity.x, 15);
             Debug.Log("pound detect");
-            rb.velocity = new Vector2(rb.velocity.x, 20);
+            enemi_straight bounce = other.gameObject.GetComponent<enemi_straight>();
+
+            rb.velocity = new Vector2(rb.velocity.x, bounce.bounce_int);
         }
 
     }

@@ -56,17 +56,18 @@ public class charController : MonoBehaviour
     private Transform m_currMovingPlatform; 
 
     bool jmp;
-    public static bool goinup, comingdown, landed, groundpound, block, attack, run, walk, runattack, idleattack, takedamage, damagedirection, walkattack, invincibility, dead;
+    public static bool goinup, comingdown, landed, groundpound, block, run, walk, runattack, idleattack, takedamage, damagedirection, walkattack, invincibility, dead, charcontrollerenabled, finish;
     public float GroundpoundForce;
     bool jumpswitch, jumpswitchani, runswitch, runswitchani;
     public GameObject swordcol, blockcol, poundcol;
-
+    public bool attackbool;
     [Header("Blink")]
     public float spriteBlinkingTimer = 0.0f;
     public float spriteBlinkingMiniDuration ;
 
     public float invincibility_timer;
     bool invinbool, pushbool, pushcall, deadcall;
+    bool finishonce;
     // Start is called before the first frame update
     void Start()
     {
@@ -80,7 +81,6 @@ public class charController : MonoBehaviour
         comingdown = false;
         groundpound = false;
         block = false;
-        attack = false;
         jumpswitch = true;
         runswitch = true;
         walk = false;
@@ -100,28 +100,43 @@ public class charController : MonoBehaviour
         pushcall = true;
         dead = false;
         deadcall = true;
+        attackbool = false;
+        charcontrollerenabled = true;
+        finish = false;
+        finishonce = false;
     }
     private void FixedUpdate()
     {
-        
+        if (charcontrollerenabled)
+        {
             Move();
+        }
+            
                 
     }
     // Update is called once per frame
     void Update()
     {
         death();
-        if (dead == false)
+
+        if (dead == false && charcontrollerenabled)
         {
             Jump();
             BetterJump();
             CheckIfGrounded();
             findjumppos();
             combat();
-            swordattack();
             damage();
         }
-        
+        if (finish && finishonce == false )
+        {
+            //Vector3 topos = new Vector3 (transform.position.x + 20, transform.position.y, transform.position.z);
+            //transform.position = Vector3.Lerp(transform.position, topos, 3*Time.deltaTime);
+            //transform.localRotation = Quaternion.Euler(0, 180, 0);
+            Debug.Log("its in");
+            finishonce = true;
+            rb.velocity = new Vector2(5, rb.velocity.y);
+        }
     }
 
     void death()
@@ -172,6 +187,12 @@ public class charController : MonoBehaviour
         }*/
         if (runswitch == true && runswitchani == true && takedamage == false && dead ==false)
         {
+            if (runattack || walkattack|| idleattack)
+            {
+                walkattack = false;
+                runattack = false;
+                idleattack = false;
+            }
             float x = Input.GetAxisRaw("Horizontal");
             if (x == 0)
             {
@@ -179,14 +200,12 @@ public class charController : MonoBehaviour
                 walk = false;
                rb.velocity = new Vector2(0, rb.velocity.y);
                 runattack = false;
-                if (Input.GetKey(KeyCode.X))
+                if (Input.GetKeyDown(KeyCode.X) && attackbool == false)
                 {
+                    
                     idleattack = true;
                 }
-                else
-                {
-                    idleattack = false;
-                }
+                
                 return;
             }
 
@@ -198,14 +217,12 @@ public class charController : MonoBehaviour
                 walk = false;
                 
                 
-                    if (Input.GetKey(KeyCode.X))
+                    if (Input.GetKeyDown(KeyCode.X) && attackbool == false)
                     {
                         runattack = true;
+
                     }
-                    else
-                    {
-                        runattack = false;
-                    } 
+                    
             }
             else if (Input.GetKey(KeyCode.LeftShift))
             {
@@ -222,14 +239,11 @@ public class charController : MonoBehaviour
                 run = false;
                 walk = true;
                 runattack = false;
-                if (Input.GetKey(KeyCode.X))
+                if (Input.GetKeyDown(KeyCode.X) && attackbool == false )
                 {
                     walkattack = true;
                 }
-                else
-                {
-                    walkattack = false;
-                }
+                
             }
         }
         else if(runswitch == false || runswitchani == false)
@@ -324,10 +338,18 @@ public class charController : MonoBehaviour
 
     void gd()
     {
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.DownArrow))
         {
+            if (rb.velocity.y < 5)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, -GroundpoundForce+ rb.velocity.y);
+            }
+            else
+            {
+                rb.velocity = new Vector2(rb.velocity.x, -GroundpoundForce );
+            }
             groundpound = true;
-            rb.velocity = new Vector2(rb.velocity.x, -GroundpoundForce);
+            
             poundcol.SetActive(true);
         }
     }
@@ -366,10 +388,6 @@ public class charController : MonoBehaviour
         }
     }
 
-    void attackoff()
-    {
-        attack = false;
-    }
 
     void runoff()
     {
@@ -396,20 +414,19 @@ public class charController : MonoBehaviour
     void shake()
     {
         shakecine.flip = true;
-        shakecine.ShakeDuration = 0.5f;
-        shakecine.ShakeAmplitude = 1;
+        shakecine.ShakeDuration = 0.2f;
+        shakecine.ShakeAmplitude = 0.5f;
     }
-    void swordattack()
+    void attackon()
     {
-        if (idleattack || runattack || walkattack)
-        {
-            swordcol.SetActive(true);
-        }
-        else
-        {
-            swordcol.SetActive(false);
-        }
+        attackbool = true;
+        swordcol.SetActive(true);  
         
+    }
+    void attackoff()
+    {
+        swordcol.SetActive(false);
+        attackbool = false ;
     }
     void damage()
     {
@@ -522,14 +539,20 @@ public class charController : MonoBehaviour
         if (col.collider.tag == "enemy")
         {
 
-            Vector2 dir = col.gameObject.transform.position - transform.position;
+  //          Vector2 dir = col.gameObject.transform.position - transform.position;
             // We then get the opposite (-Vector3) and normalize it
-            dir = -dir.normalized;
+ //           dir = -dir.normalized;
             // And finally we add force in the direction of dir and multiply it by force. 
             // This will push back the player
            // rb.velocity = new Vector2(6, 6);
-            takedamage = true;
+ //           takedamage = true;
             
+        }
+        if (col.collider.tag == "fell")
+        {
+
+            charcontrollerenabled = false;
+
         }
 
     }
@@ -549,7 +572,13 @@ public class charController : MonoBehaviour
             takedamage = true;
             damagedirection = false;
         }
-
+        if (other.gameObject.tag == "finish")
+        {
+            charcontrollerenabled = false;
+            run = true;
+            uilevel.finish = true;
+            finish = true;
+        }
     }
 
     void bufferjump()

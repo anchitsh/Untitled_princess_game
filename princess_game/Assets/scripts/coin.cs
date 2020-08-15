@@ -20,7 +20,7 @@ public class coin : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             
-            coinmanager.score++;
+            coinmanager.coin++;
             Destroy(gameObject);
         }
     }

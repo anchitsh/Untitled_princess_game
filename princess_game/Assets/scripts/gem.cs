@@ -20,7 +20,7 @@ public class gem : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
 
-            coinmanager.score=+10;
+            coinmanager.gem++;
             Destroy(gameObject);
         }
     }

@@ -15,6 +15,7 @@ public class enemi_straight : MonoBehaviour
     public bool movebool;
     private SpriteRenderer spriteren;
     bool corbool;
+    public float bounce_int;
 
     // Start is called before the first frame update
     void Start()

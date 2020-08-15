@@ -8,15 +8,23 @@ using UnityEngine.SceneManagement;
 public class UImanager : MonoBehaviour
 {
     public GameObject cursor;
+    public GameObject transition1, transition2;
+    Animator tn1, tn2;
     public int currentselect;
     Animator ani;
+    public static int startint;
     // Start is called before the first frame update
     void Start()
     {
+        tn1 = transition1.GetComponent<Animator>();
+        tn2 = transition2.GetComponent<Animator>();
+        transition1.SetActive(true);
+        transition2.SetActive(true);
         currentselect = 1;
 
         ani = cursor.GetComponent<Animator>();
-
+        tn1.SetTrigger("out");
+        tn2.SetTrigger("out");
     }
 
     // Update is called once per frame
@@ -116,22 +124,32 @@ public class UImanager : MonoBehaviour
             
             if (currentselect == 1)
             {
-                SceneManager.LoadScene("test");
+                startint = 1;
+               // SceneManager.LoadScene("intro");
             }
             else if (currentselect == 2)
             {
-                SceneManager.LoadScene("test");
+                startint = 2;
+                //SceneManager.LoadScene("test");
 
             }
             else if (currentselect == 3)
             {
-                SceneManager.LoadScene("test");
+                startint = 3;
+                //SceneManager.LoadScene("test");
 
             }
+            tn1.SetTrigger("in");
+            tn2.SetTrigger("in");
+            tn1.SetBool("start", true);
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyUp(KeyCode.Escape))
         {
-            ExitGame();
+            startint = -1;
+            tn1.SetTrigger("in");
+            tn2.SetTrigger("in");
+            tn1.SetBool("start", true);
+            // ExitGame();
         }
     }
 
